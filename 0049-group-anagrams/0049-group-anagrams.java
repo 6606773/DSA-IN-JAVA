@@ -1,35 +1,36 @@
-import java.util.*;
-
 class Solution {
-    public List<List<String>> groupAnagrams(String[] strs) {
-        // Map to group words by their sorted key
-        Map<String, List<String>> map = new HashMap<>();
+    public List<List<String>> groupAnagrams(String[] S) {
+        HashMap<String , ArrayList<String>> mp = new HashMap<>();
         
-        for (String word : strs) {
-            // Sort the characters in the word to form the key
-            char[] chars = word.toCharArray();
-            Arrays.sort(chars);
-            String key = new String(chars);
-            
-            // Add the word to the correct group
-            map.computeIfAbsent(key, k -> new ArrayList<>()).add(word);
-        }
-        
-        // Return all grouped anagrams
-        return new ArrayList<>(map.values());
-    }
+        int sz = S.length;
 
-    // Quick test
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        
-        String[] strs1 = {"eat","tea","tan","ate","nat","bat"};
-        System.out.println(sol.groupAnagrams(strs1));
-        
-        String[] strs2 = {""};
-        System.out.println(sol.groupAnagrams(strs2));
-        
-        String[] strs3 = {"a"};
-        System.out.println(sol.groupAnagrams(strs3));
+        for(int i = 0; i < sz; ++i) {
+            int n = S[i].length();
+            char [] C = new char[n];
+
+            for(int j = 0; j < n; ++j) 
+                C[j] = S[i].charAt(j);
+
+            Arrays.sort(C);
+
+            String X = new String(C);  
+
+            if(mp.containsKey(X)) {
+                ArrayList<String> T = mp.get(X);
+                T.add(S[i]);
+            }  else {
+                ArrayList<String> T = new ArrayList<>();
+                T.add(S[i]);
+                mp.put(X , T);
+            }
+        }
+
+        List<List<String>> ans = new ArrayList<>();
+
+        for(Map.Entry<String , ArrayList<String>> C : mp.entrySet()) {
+            ans.add(C.getValue());
+        }
+
+        return ans;
     }
-  }
+}
